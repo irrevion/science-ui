@@ -6,21 +6,22 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import Interact from '../Contexts/Interact';
 
 export default function ButtonAppBar(props) {
+  //const ctx = React.useContext(Interact);
+  //console.log('ctx ', ctx);
+  //console.log('ctx.fnOpenMenu ', ctx.fnOpenMenu);
+  //console.log('ctx.fnExpand ', ctx.fnExpand);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+		  <Interact.Consumer>{value => (
+            <IconButton onClick={() => {value.openMenu();}} size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
+              <MenuIcon />
+            </IconButton>
+		  )}</Interact.Consumer>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Irrevion Science-UI / {props.title}
           </Typography>
