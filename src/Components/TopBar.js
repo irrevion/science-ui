@@ -9,10 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Interact from '../Contexts/Interact';
 
 export default function ButtonAppBar(props) {
-  //const ctx = React.useContext(Interact);
-  //console.log('ctx ', ctx);
-  //console.log('ctx.fnOpenMenu ', ctx.fnOpenMenu);
-  //console.log('ctx.fnExpand ', ctx.fnExpand);
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -23,7 +19,7 @@ export default function ButtonAppBar(props) {
             </IconButton>
 		  )}</Interact.Consumer>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Irrevion Science-UI / {props.title}
+            Irrevion Science UI / {props.title}
           </Typography>
         </Toolbar>
       </AppBar>
