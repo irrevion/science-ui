@@ -1,3 +1,8 @@
+@font-face {
+    font-family: segment;
+    src: url("../public/fonts/7SEGMENTALDIGITALDISPLAY.ttf");
+}
+
 .App {
   text-align: center;
 }
@@ -43,4 +48,14 @@
 
 .Content {
 	margin-top: 20px;
+}
+
+.ConverterZifferblatt {
+	font-family: segment !important; letter-spacing: 4px !important;
+}
+#ConverterZifferblattTo:disabled {
+	color: #000; -webkit-text-fill-color: #000;
+}
+#ConverterZifferblattTo-label {
+	color: rgba(0, 0, 0, 0.6);
 }
