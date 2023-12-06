@@ -1,0 +1,21 @@
+{
+	"categories": {
+		"angle": "Angle",
+		"brightness": "Brightness / Luminance",
+		"capacitance": "Capacitance",
+		"electric_charge": "Electric charge",
+		"electric_current": "Electric current",
+		"electric_tension": "Electric tension / Potential difference",
+		"energy": "Energy / Heat",
+		"force": "Force",
+		"frequency": "Frequency",
+		"length": "Length / Distance",
+		"luminous_intensity": "Luminous intensity",
+		"mass": "Mass / Weight",
+		"power": "Power",
+		"pressure": "Pressure",
+		"substance_amount": "Substance amount",
+		"temperature": "Temperature",
+		"time": "Time"
+	}
+}

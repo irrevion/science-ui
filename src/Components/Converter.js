@@ -1,6 +1,7 @@
 import * as React from 'react';
 import axios from "axios";
 import cfg from '../config.json';
+import i18n from '../i18n/en/Converter.json';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -36,9 +37,7 @@ class Converter extends React.Component {
 							<FormControl fullWidth>
 								<InputLabel id="ConverterKategorieLabel">Category</InputLabel>
 								<Select labelId="ConverterKategorieLabel" id="ConverterKategorie" label="Category">
-									<MenuItem value="m">Mass</MenuItem>
-									<MenuItem value="l">Length</MenuItem>
-									<MenuItem value="t">Time</MenuItem>
+									{ this.state.categories.map((c) => ( <MenuItem value={c}>{this.catName(c)}</MenuItem> )) }
 								</Select>
 							</FormControl>
 						</Grid>
@@ -108,6 +107,13 @@ class Converter extends React.Component {
 					console.log('Fail: '+a.message);
 				}
 			});
+	}
+
+	catName(c) {
+		if (i18n && i18n.categories && i18n.categories[c]) {
+			return i18n.categories[c];
+		}
+		return c;
 	}
 }
 
