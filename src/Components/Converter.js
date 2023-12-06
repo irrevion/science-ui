@@ -1,4 +1,6 @@
 import * as React from 'react';
+import axios from "axios";
+import cfg from '../config.json';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -8,8 +10,24 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import ScaleIcon from '@mui/icons-material/Scale';
 
 class Converter extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			categories: []
+		};
+	}
+
+	componentDidMount() {
+		console.log('show converter');
+		if (this.state.categories.length==0) {
+			this.loadConverterCategories();
+		}
+	}
+
 	render() {
 		return ( <Box className="Converter">
 				<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
@@ -66,7 +84,30 @@ class Converter extends React.Component {
 						</Grid>
 					</Grid>
 				</Container>
+
+				<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+					<Grid container spacing={3}>
+						<Grid item xs={12} md={12}>
+							<Button variant="contained" startIcon={<ScaleIcon />}>Convert</Button>
+						</Grid>
+					</Grid>
+				</Container>
 			</Box> );
+	}
+
+	loadConverterCategories() {
+		console.log('load converter categories from '+cfg.SERVER_URL+'physics/units/categories');
+		axios.get(cfg.SERVER_URL+'physics/units/categories')
+			.then((response) => {
+				console.log('response', response);
+				let a = response.data;
+				if (a && a.success) {
+					this.setState({categories: a.data.categories});
+					console.log('state', this.state);
+				} else {
+					console.log('Fail: '+a.message);
+				}
+			});
 	}
 }
 
