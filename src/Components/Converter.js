@@ -33,7 +33,6 @@ class Converter extends React.Component {
 	}
 
 	componentDidMount() {
-		console.log('show converter');
 		if (this.state.categories.length==0) {
 			this.loadConverterCategories();
 		}
@@ -59,7 +58,7 @@ class Converter extends React.Component {
 					<Grid container spacing={3}>
 						<Grid item xs={12} md={8}>
 							{/*<Paper>Zifferblatt</Paper>*/}
-							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattFrom" label="Magnitude" onChange={ (e) => {this.setState({magnitude_from_value: e.target.value});} } value={this.state.magnitude_from_value} fullWidth />
+							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattFrom" label="Magnitude" onChange={ (e) => {this.setState({magnitude_from_value: e.target.value});} } onFocus={ (e) => {e.target.select();} } value={this.state.magnitude_from_value} fullWidth />
 						</Grid>
 						<Grid item xs={12} md={4}>
 							{/*<Paper>Maßeinheit</Paper>*/}
@@ -169,7 +168,6 @@ class Converter extends React.Component {
 	}
 
 	convert() {
-		console.log('convert', this.state);
 		let v = this.state.magnitude_from_value;
 		let u = this.state.unit_from_selected;
 		let u2 = this.state.unit_to_selected;
