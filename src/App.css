@@ -59,3 +59,7 @@
 #ConverterZifferblattTo-label {
 	color: rgba(0, 0, 0, 0.6);
 }
+
+.Mui-error {
+	letter-spacing: normal !important;
+}
