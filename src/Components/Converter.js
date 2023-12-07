@@ -20,13 +20,15 @@ class Converter extends React.Component {
 		super(props);
 		this.state = {
 			categories: [],
-			categories_err: 0,
-			category_selected: 0,
+			categories_err: '',
+			category_selected: '',
 			units: [],
-			unit_from_err: 0,
-			unit_to_err: 0,
-			unit_from_selected: 0,
-			unit_to_selected: 0
+			unit_from_err: '',
+			unit_to_err: '',
+			unit_from_selected: '',
+			unit_to_selected: '',
+			magnitude_from_value: '0',
+			magnitude_to_result: '0'
 		};
 	}
 
@@ -57,15 +59,16 @@ class Converter extends React.Component {
 					<Grid container spacing={3}>
 						<Grid item xs={12} md={8}>
 							{/*<Paper>Zifferblatt</Paper>*/}
-							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattFrom" label="Magnitude" defaultValue="0" fullWidth />
+							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattFrom" label="Magnitude" onChange={ (e) => {this.setState({magnitude_from_value: e.target.value});} } value={this.state.magnitude_from_value} fullWidth />
 						</Grid>
 						<Grid item xs={12} md={4}>
 							{/*<Paper>Maßeinheit</Paper>*/}
-							<FormControl fullWidth>
+							<FormControl fullWidth { ...(this.state.unit_from_err? {error: true}: {}) } >
 								<InputLabel id="ConverterMassenheitFromLabel">Units</InputLabel>
-								<Select labelId="ConverterMassenheitFromLabel" id="ConverterMassenheitFrom" label="Units">
+								<Select labelId="ConverterMassenheitFromLabel" id="ConverterMassenheitFrom" label="Units" onChange={ (e) => {this.setState({unit_from_selected: e.target.value});} } value={this.state.unit_from_selected}>
 									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitFrom_'+u }>{u}</MenuItem> )) }
 								</Select>
+								{ (this.state.unit_from_err? ( <FormHelperText>{ this.state.unit_from_err }</FormHelperText> ): '') }
 							</FormControl>
 						</Grid>
 					</Grid>
@@ -75,15 +78,16 @@ class Converter extends React.Component {
 					<Grid container spacing={3}>
 						<Grid item xs={12} md={8}>
 							{/*<Paper>Zifferblatt</Paper>*/}
-							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattTo" label="Conversion result" value="0" fullWidth disabled sx={{color: '#000'}} />
+							<TextField variant="outlined" inputProps={{className: "ConverterZifferblatt"}} className="ConverterZifferblatt" id="ConverterZifferblattTo" label="Conversion result" value={ this.state.magnitude_to_result } fullWidth disabled sx={{color: '#000'}} />
 						</Grid>
 						<Grid item xs={12} md={4}>
 							{/*<Paper>Maßeinheit</Paper>*/}
-							<FormControl fullWidth>
+							<FormControl fullWidth { ...(this.state.unit_to_err? {error: true}: {}) } >
 								<InputLabel id="ConverterMassenheitToLabel">Target unit</InputLabel>
-								<Select labelId="ConverterMassenheitToLabel" id="ConverterMassenheitTo" label="Target unit">
+								<Select labelId="ConverterMassenheitToLabel" id="ConverterMassenheitTo" label="Target unit" onChange={ (e) => {this.setState({unit_to_selected: e.target.value});} } value={this.state.unit_to_selected}>
 									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitTo_'+u }>{u}</MenuItem> )) }
 								</Select>
+								{ (this.state.unit_to_err? ( <FormHelperText>{ this.state.unit_to_err }</FormHelperText> ): '') }
 							</FormControl>
 						</Grid>
 					</Grid>
@@ -92,7 +96,7 @@ class Converter extends React.Component {
 				<Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
 					<Grid container spacing={3}>
 						<Grid item xs={12} md={12}>
-							<Button variant="contained" startIcon={<ScaleIcon />}>Convert</Button>
+							<Button variant="contained" startIcon={<ScaleIcon />} onClick={ (e) => {this.convert();} }>Convert</Button>
 						</Grid>
 					</Grid>
 				</Container>
@@ -131,7 +135,6 @@ class Converter extends React.Component {
 	}
 
 	loadUnits(e) {
-		console.log('load units for category '+e.target.value);
 		let cat = e.target.value;
 
 		// reset state
@@ -141,16 +144,13 @@ class Converter extends React.Component {
 			unit_from_err: 0,
 			unit_to_err: 0
 		});
-		console.log(this.state);
 
 		// retrieve data
 		axios.get(cfg.SERVER_URL+'physics/units/category/'+cat)
 			.then((response) => {
 				let a = response.data;
-				console.log('response', a);
 				if (a && a.success) {
 					this.setState({units: a.data.units});
-					console.log(this.state.units, '=', a.data.units);
 				} else {
 					console.log('Fail: '+a.message);
 					this.setState({
@@ -158,7 +158,6 @@ class Converter extends React.Component {
 						unit_to_err: a.message
 					});
 				}
-				console.log(this.state);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -167,6 +166,96 @@ class Converter extends React.Component {
 					unit_to_err: 'Unable to load units: '+err.message
 				});
 			});
+	}
+
+	convert() {
+		console.log('convert', this.state);
+		let v = this.state.magnitude_from_value;
+		let u = this.state.unit_from_selected;
+		let u2 = this.state.unit_to_selected;
+		let c = this.state.category_selected;
+
+		// reset state
+		this.setState({
+			categories_err: '',
+			unit_from_err: '',
+			unit_to_err: ''
+		});
+
+		// validate
+		let abort = false;
+		if (!c) {
+			this.setState({categories_err: 'Select category'});
+			abort = true;
+		}
+		if (!u) {
+			this.setState({unit_from_err: 'Select unit to convert from'});
+			abort = true;
+		}
+		if (!u2) {
+			this.setState({unit_to_err: 'Select target unit'});
+			abort = true;
+		}
+		if (abort) return;
+
+		// convert
+		axios.post(cfg.SERVER_URL+'physics/units/convert/',  {
+					value: v,
+					from: c+'.'+u,
+					to: c+'.'+u2
+				},
+				{
+					headers: {'Content-Type': 'application/json'}
+				}
+			)
+			.then((response) => {
+				let a = response.data;
+				if (a && a.success) {
+					this.setState({magnitude_to_result: a.data.result.value});
+				} else {
+					console.log('Fail: '+a.message);
+					this.setState({
+						unit_to_err: a.message
+					});
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				this.setState({
+					unit_to_err: 'Unable to load units: '+err.message
+				});
+			});
+
+		// convert
+		/*
+		fetch(cfg.SERVER_URL+'physics/units/convert/', {
+			method: "POST",
+			body: JSON.stringify({
+				value: v,
+				from: c+'.'+u,
+				to: c+'.'+u2
+			}),
+			headers: {"Content-type": "application/json; charset=UTF-8"}
+		})
+			.then(response => response.json())
+			.then((response) => {
+				let a = response;
+				if (a && a.success) {
+					this.setState({magnitude_to_result: a.data.result.value});
+				} else {
+					console.log('Fail: '+a.message);
+					this.setState({
+						unit_to_err: a.message
+					});
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+				this.setState({
+					unit_to_err: 'Unable to load units: '+err.message
+				});
+			});
+		*/
 	}
 }
 
