@@ -1,5 +1,6 @@
 import * as React from 'react';
 import axios from "axios";
+import utils from '../Models/Utils';
 import cfg from '../config.json';
 import i18n from '../i18n/en/Converter.json';
 import Box from '@mui/material/Box';
@@ -110,7 +111,8 @@ class Converter extends React.Component {
 		});
 
 		// retrieve data
-		axios.get(cfg.SERVER_URL+'physics/units/categories')
+		// axios.get(cfg.SERVER_URL+'physics/units/categories')
+		axios.get(utils.cfg('SERVER_URL')+'physics/units/categories')
 			.then((response) => {
 				let a = response.data;
 				if (a && a.success) {
@@ -145,7 +147,8 @@ class Converter extends React.Component {
 		});
 
 		// retrieve data
-		axios.get(cfg.SERVER_URL+'physics/units/category/'+cat)
+		// axios.get(cfg.SERVER_URL+'physics/units/category/'+cat)
+		axios.get(utils.cfg('SERVER_URL')+'physics/units/category/'+cat)
 			.then((response) => {
 				let a = response.data;
 				if (a && a.success) {
@@ -197,7 +200,8 @@ class Converter extends React.Component {
 		if (abort) return;
 
 		// convert
-		axios.post(cfg.SERVER_URL+'physics/units/convert/',  {
+		// axios.post(cfg.SERVER_URL+'physics/units/convert/',  {
+		axios.post(utils.cfg('SERVER_URL')+'physics/units/convert/',  {
 					value: v,
 					from: c+'.'+u,
 					to: c+'.'+u2

@@ -1,3 +1,12 @@
 {
-	"SERVER_URL":  "http://localhost/science-api/web/api/"
+	"CONFIG":  "default",
+	"SERVER_URL":  "http://localhost/science-api/web/api/",
+	"dev": {
+		"CONFIG":  "development",
+		"SERVER_URL":  "http://localhost/science-api/web/api/"
+	},
+	"prod": {
+		"CONFIG":  "production",
+		"SERVER_URL":  "https://science-api.irrevion.dp.ua/web/api/"
+	}
 }
