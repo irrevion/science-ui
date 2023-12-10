@@ -7,6 +7,6 @@
 	},
 	"prod": {
 		"CONFIG":  "production",
-		"SERVER_URL":  "https://science-api.irrevion.dp.ua/web/api/"
+		"SERVER_URL":  "https://science-api.irrevion.dp.ua/api/"
 	}
 }
