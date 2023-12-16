@@ -1,6 +1,7 @@
 {
 	"categories": {
 		"angle": "Angle",
+		"angular_square": "Angular square (solid angle)",
 		"brightness": "Brightness / Luminance",
 		"capacitance": "Capacitance",
 		"electric_charge": "Electric charge",
