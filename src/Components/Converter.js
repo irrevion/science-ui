@@ -229,8 +229,7 @@ class Converter extends React.Component {
 			});
 
 		// convert
-		/*
-		fetch(cfg.SERVER_URL+'physics/units/convert/', {
+		/*fetch(cfg.SERVER_URL+'physics/units/convert/', {
 			method: "POST",
 			body: JSON.stringify({
 				value: v,
@@ -245,7 +244,9 @@ class Converter extends React.Component {
 				if (a && a.success) {
 					this.setState({magnitude_to_result: a.data.result.value});
 				} else {
-					console.log('Fail: '+a.message);
+					console.log(a);
+					
+					//console.log('Fail: '+a.message);
 					this.setState({
 						unit_to_err: a.message
 					});
@@ -256,8 +257,7 @@ class Converter extends React.Component {
 				this.setState({
 					unit_to_err: 'Unable to load units: '+err.message
 				});
-			});
-		*/
+			});*/
 	}
 }
 
