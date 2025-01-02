@@ -66,7 +66,7 @@ class Converter extends React.Component {
 							<FormControl fullWidth { ...(this.state.unit_from_err? {error: true}: {}) } >
 								<InputLabel id="ConverterMassenheitFromLabel">Units</InputLabel>
 								<Select labelId="ConverterMassenheitFromLabel" id="ConverterMassenheitFrom" label="Units" onChange={ (e) => {this.setState({unit_from_selected: e.target.value});} } value={this.state.unit_from_selected}>
-									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitFrom_'+u }>{u}</MenuItem> )) }
+									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitFrom_'+u }>{this.unitName(u)}</MenuItem> )) }
 								</Select>
 								{ (this.state.unit_from_err? ( <FormHelperText>{ this.state.unit_from_err }</FormHelperText> ): '') }
 							</FormControl>
@@ -85,7 +85,7 @@ class Converter extends React.Component {
 							<FormControl fullWidth { ...(this.state.unit_to_err? {error: true}: {}) } >
 								<InputLabel id="ConverterMassenheitToLabel">Target unit</InputLabel>
 								<Select labelId="ConverterMassenheitToLabel" id="ConverterMassenheitTo" label="Target unit" onChange={ (e) => {this.setState({unit_to_selected: e.target.value});} } value={this.state.unit_to_selected}>
-									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitTo_'+u }>{u}</MenuItem> )) }
+									{ this.state.units.map((u) => ( <MenuItem value={u} key={ 'ConverterMassenheitTo_'+u }>{this.unitName(u)}</MenuItem> )) }
 								</Select>
 								{ (this.state.unit_to_err? ( <FormHelperText>{ this.state.unit_to_err }</FormHelperText> ): '') }
 							</FormControl>
@@ -133,6 +133,13 @@ class Converter extends React.Component {
 			return i18n.categories[c];
 		}
 		return c;
+	}
+
+	unitName(u) {
+		if (i18n && i18n.units && i18n.units[u]) {
+			return i18n.units[u];
+		}
+		return u;
 	}
 
 	loadUnits(e) {
